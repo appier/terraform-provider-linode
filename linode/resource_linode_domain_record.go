@@ -1,7 +1,6 @@
 package linode
 
 import (
-	"errors"
 	"fmt"
 
 	"github.com/hashicorp/terraform/helper/schema"
@@ -180,9 +179,41 @@ func readLinodeDomainRecord(d *schema.ResourceData, meta interface{}) error {
 }
 
 func updateLinodeDomainRecord(d *schema.ResourceData, meta interface{}) error {
-	return errors.New("Not Implemented")
+	client := meta.(LinodeClient)
+
+	domainID := d.Get("domain_id").(string)
+
+	recordID := d.Id()
+
+	domainRecord := fillDomainRecord(d)
+
+	res := &DomainRecord{}
+
+	// https://developers.linode.com/api/v4#operation/updateDomainRecord
+	if err := client.Request("PUT", fmt.Sprintf("domains/%s/records/%s", domainID, recordID), domainRecord, res); err != nil {
+		return err
+	}
+
+	fillResourceData(res, d)
+
+	return nil
 }
 
 func deleteLinodeDomainRecord(d *schema.ResourceData, meta interface{}) error {
-	return errors.New("Not Implemented")
+	client := meta.(LinodeClient)
+
+	domainID := d.Get("domain_id").(string)
+
+	recordID := d.Id()
+
+	domainRecord := fillDomainRecord(d)
+
+	res := &DomainRecord{}
+
+	// https://developers.linode.com/api/v4#operation/deleteDomainRecord
+	if err := client.Request("DELETE", fmt.Sprintf("domains/%s/records/%s", domainID, recordID), domainRecord, res); err != nil {
+		return err
+	}
+
+	return nil
 }
