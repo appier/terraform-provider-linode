@@ -54,6 +54,10 @@ func resourceLinodeDomainRecord() *schema.Resource {
 				Type:     schema.TypeInt,
 				Optional: true,
 			},
+			"tag": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+			},
 		},
 	}
 }

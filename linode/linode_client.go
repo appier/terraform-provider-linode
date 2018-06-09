@@ -31,6 +31,7 @@ type DomainRecord struct {
 	Service  *string `json:"service"`
 	Protocol *string `json:"protocol"`
 	TTLSec   *int    `json:"ttl_sec,omitempty"`
+	Tag      *string `json:"tag,omitempty"`
 }
 
 type LinodeClient interface {
