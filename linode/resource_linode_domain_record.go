@@ -101,6 +101,11 @@ func fillDomainRecord(d *schema.ResourceData) *DomainRecord {
 		res.TTLSec = &ttlSec
 	}
 
+	if value, ok := d.GetOk("tag"); ok {
+		tag := value.(string)
+		res.Tag = &tag
+	}
+
 	return res
 }
 
@@ -137,6 +142,10 @@ func fillResourceData(r *DomainRecord, d *schema.ResourceData) {
 
 	if r.TTLSec != nil {
 		d.Set("ttl_sec", *r.TTLSec)
+	}
+
+	if r.Tag != nil {
+		d.Set("tag", *r.Tag)
 	}
 }
 
