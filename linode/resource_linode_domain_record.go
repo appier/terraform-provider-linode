@@ -215,12 +215,10 @@ func deleteLinodeDomainRecord(d *schema.ResourceData, meta interface{}) error {
 
 	recordID := d.Id()
 
-	domainRecord := fillDomainRecord(d)
-
 	res := &DomainRecord{}
 
 	// https://developers.linode.com/api/v4#operation/deleteDomainRecord
-	if err := client.Request("DELETE", fmt.Sprintf("domains/%s/records/%s", domainID, recordID), domainRecord, res); err != nil {
+	if err := client.Request("DELETE", fmt.Sprintf("domains/%s/records/%s", domainID, recordID), nil, res); err != nil {
 		return err
 	}
 
