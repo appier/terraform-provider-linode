@@ -3,7 +3,7 @@ package linode
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
+	"fmt"
 	"log"
 	"net/http"
 )
@@ -86,13 +86,13 @@ func (c LinodeClientImpl) Request(method string, snippet string, body interface{
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != 200 {
-		return errors.New(rsp.Status)
-	}
-
 	buf := new(bytes.Buffer)
 	buf.ReadFrom(rsp.Body)
 	bufStr := buf.String()
+
+	if rsp.StatusCode != 200 {
+		return fmt.Errorf("status %s, body = %s", bufStr)
+	}
 
 	err = json.Unmarshal([]byte(bufStr), res)
 	if err != nil {
