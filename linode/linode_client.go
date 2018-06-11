@@ -90,12 +90,16 @@ func (c LinodeClientImpl) Request(method string, snippet string, body interface{
 		return errors.New(rsp.Status)
 	}
 
-	err = json.NewDecoder(rsp.Body).Decode(&res)
+	buf := new(bytes.Buffer)
+	buf.ReadFrom(rsp.Body)
+	bufStr := buf.String()
+
+	err = json.Unmarshal([]byte(bufStr), res)
 	if err != nil {
 		return err
 	}
 
-	log.Printf("statusCode = %d, res = %+v", rsp.StatusCode, res)
+	log.Printf("statusCode = %d, rsp = %s", rsp.StatusCode, bufStr)
 
 	return nil
 }
