@@ -61,7 +61,7 @@ func resourceLinodeDomainRecord() *schema.Resource {
 	}
 }
 
-func fillDomainRecord(d *schema.ResourceData) *DomainRecord {
+func toDomainRecord(d *schema.ResourceData) *DomainRecord {
 	res := &DomainRecord{}
 
 	if value, ok := d.GetOk("weight"); ok {
@@ -109,7 +109,7 @@ func fillDomainRecord(d *schema.ResourceData) *DomainRecord {
 	return res
 }
 
-func fillResourceData(r *DomainRecord, d *schema.ResourceData) {
+func (r *DomainRecord) fillResourceData(d *schema.ResourceData) {
 	d.SetId(fmt.Sprintf("%d", *r.ID))
 
 	if r.Weight != nil {
@@ -154,7 +154,7 @@ func createLinodeDomainRecord(d *schema.ResourceData, meta interface{}) error {
 
 	domainID := d.Get("domain_id").(string)
 
-	domainRecord := fillDomainRecord(d)
+	domainRecord := toDomainRecord(d)
 
 	res := &DomainRecord{}
 
@@ -163,7 +163,7 @@ func createLinodeDomainRecord(d *schema.ResourceData, meta interface{}) error {
 		return err
 	}
 
-	fillResourceData(res, d)
+	res.fillResourceData(d)
 
 	return nil
 }
@@ -182,7 +182,7 @@ func readLinodeDomainRecord(d *schema.ResourceData, meta interface{}) error {
 		return err
 	}
 
-	fillResourceData(res, d)
+	res.fillResourceData(d)
 
 	return nil
 }
@@ -194,7 +194,7 @@ func updateLinodeDomainRecord(d *schema.ResourceData, meta interface{}) error {
 
 	recordID := d.Id()
 
-	domainRecord := fillDomainRecord(d)
+	domainRecord := toDomainRecord(d)
 
 	res := &DomainRecord{}
 
@@ -203,7 +203,7 @@ func updateLinodeDomainRecord(d *schema.ResourceData, meta interface{}) error {
 		return err
 	}
 
-	fillResourceData(res, d)
+	res.fillResourceData(d)
 
 	return nil
 }
