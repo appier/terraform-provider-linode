@@ -46,10 +46,7 @@ func resourceLinodeLinode() *schema.Resource {
 				Computed: true,
 			},
 			"ipv6": &schema.Schema{
-				Type: schema.TypeList,
-				Elem: &schema.Schema{
-					Type: schema.TypeString,
-				},
+				Type:     schema.TypeString,
 				Computed: true,
 			},
 			"stackscript_id": &schema.Schema{
@@ -106,7 +103,7 @@ func toLinode(d *schema.ResourceData) *Linode {
 
 	if value, ok := d.GetOk("group"); ok {
 		group := value.(string)
-		res.Label = &group
+		res.Group = &group
 	}
 
 	if value, ok := d.GetOk("label"); ok {
@@ -135,7 +132,7 @@ func toLinode(d *schema.ResourceData) *Linode {
 	}
 
 	if value, ok := d.GetOk("ipv6"); ok {
-		ipv6 := value.([]string)
+		ipv6 := value.(string)
 		res.IPv6 = &ipv6
 	}
 

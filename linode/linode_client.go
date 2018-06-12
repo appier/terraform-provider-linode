@@ -43,7 +43,7 @@ type Linode struct {
 	Type            *string   `json:"type,omitempty"`
 	Status          *string   `json:"status,omitempty"`
 	IPv4            *[]string `json:"ipv4,omitempty"`
-	IPv6            *[]string `json:"ipv6,omitempty"`
+	IPv6            *string   `json:"ipv6,omitempty"`
 	StackscriptID   *string   `json:"stackscript_id,omitempty"`
 	StackscriptData *string   `json:"stackscript_data,omitempty"`
 	Booted          *bool     `json:"booted,omitempty"`
@@ -111,6 +111,8 @@ func (c LinodeClientImpl) Request(method string, snippet string, body interface{
 	buf.ReadFrom(rsp.Body)
 	bufStr := buf.String()
 
+	log.Printf("status %s, body = %s", rsp.Status, bufStr)
+
 	if rsp.StatusCode != 200 {
 		return fmt.Errorf("status %s, body = %s", rsp.Status, bufStr)
 	}
@@ -119,8 +121,6 @@ func (c LinodeClientImpl) Request(method string, snippet string, body interface{
 	if err != nil {
 		return err
 	}
-
-	log.Printf("statusCode = %d, rsp = %s", rsp.StatusCode, bufStr)
 
 	return nil
 }
