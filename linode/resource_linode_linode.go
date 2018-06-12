@@ -21,15 +21,15 @@ func resourceLinodeLinode() *schema.Resource {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
+			"region": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+			},
 			"type": &schema.Schema{
 				Type:     schema.TypeString,
-				Computed: true,
+				Optional: true,
 			},
 			"status": &schema.Schema{
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-			"region": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
 			},

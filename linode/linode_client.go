@@ -34,6 +34,26 @@ type DomainRecord struct {
 	Tag      *string `json:"tag,omitempty"`
 }
 
+type Linode struct {
+	ID              *int      `json:"id,omitempty"`
+	Hypervisor      *string   `json:"hypervisor,omitempty"`
+	Label           *string   `json:"label,omitempty"`
+	Region          *string   `json:"region,omitempty"`
+	Type            *string   `json:"type,omitempty"`
+	Status          *string   `json:"status,omitempty"`
+	IPv4            *[]string `json:"ipv4,omitempty"`
+	IPv6            *[]string `json:"ipv6,omitempty"`
+	StackscriptID   *string   `json:"stackscript_id,omitempty"`
+	StackscriptData *string   `json:"stackscript_data,omitempty"`
+	Booted          *bool     `jsons:"booted,omitempty"`
+	RootPass        *string   `jsons:"root_pass,omitempty"`
+	Image           *string   `jsons:"image,omitempty"`
+	AuthorizedKeys  *[]string `jsons:"authorized_keys,omitempty"`
+	BackupID        *string   `jsons:"backup_id,omitempty"`
+	BackupsEnabled  *bool     `jsons:"backups_enabled,omitempty"`
+	SwapSize        *int      `jsons:"swap_size,omitempty"`
+}
+
 type LinodeClient interface {
 	Request(method string, snippet string, body interface{}, res interface{}) error
 }
