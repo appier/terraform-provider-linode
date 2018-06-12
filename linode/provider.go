@@ -17,6 +17,7 @@ func Provider() terraform.ResourceProvider {
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			"linode_domain_record": resourceLinodeDomainRecord(),
+			"linode_linode":        resourceLinodeLinode(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{
 			"linode_domain": dataSourceLinodeDomain(),

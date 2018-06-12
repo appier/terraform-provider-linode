@@ -37,6 +37,7 @@ type DomainRecord struct {
 type Linode struct {
 	ID              *int      `json:"id,omitempty"`
 	Hypervisor      *string   `json:"hypervisor,omitempty"`
+	Group           *string   `json:"group,omitempty"`
 	Label           *string   `json:"label,omitempty"`
 	Region          *string   `json:"region,omitempty"`
 	Type            *string   `json:"type,omitempty"`

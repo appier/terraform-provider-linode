@@ -18,6 +18,10 @@ func resourceLinodeLinode() *schema.Resource {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
+			"group": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+			},
 			"label": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
@@ -35,11 +39,17 @@ func resourceLinodeLinode() *schema.Resource {
 				Computed: true,
 			},
 			"ipv4": &schema.Schema{
-				Type:     schema.TypeList,
+				Type: schema.TypeList,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
 				Computed: true,
 			},
 			"ipv6": &schema.Schema{
-				Type:     schema.TypeList,
+				Type: schema.TypeList,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
 				Computed: true,
 			},
 			"stackscript_id": &schema.Schema{
@@ -64,7 +74,10 @@ func resourceLinodeLinode() *schema.Resource {
 				Optional: true,
 			},
 			"authorized_keys": &schema.Schema{
-				Type:     schema.TypeList,
+				Type: schema.TypeList,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
 				Optional: true,
 			},
 			"backup_id": &schema.Schema{
@@ -89,6 +102,11 @@ func toLinode(d *schema.ResourceData) *Linode {
 	if value, ok := d.GetOk("hypervisor"); ok {
 		hypervisor := value.(string)
 		res.Hypervisor = &hypervisor
+	}
+
+	if value, ok := d.GetOk("group"); ok {
+		group := value.(string)
+		res.Label = &group
 	}
 
 	if value, ok := d.GetOk("label"); ok {
@@ -176,6 +194,10 @@ func (l *Linode) fillResourceData(d *schema.ResourceData) {
 		d.Set("hypervisor", *l.Hypervisor)
 	}
 
+	if l.Group != nil {
+		d.Set("group", *l.Group)
+	}
+
 	if l.Label != nil {
 		d.Set("label", *l.Label)
 	}
@@ -238,7 +260,20 @@ func (l *Linode) fillResourceData(d *schema.ResourceData) {
 }
 
 func createLinodeLinode(d *schema.ResourceData, meta interface{}) error {
-	return errors.New("Not implemented")
+	client := meta.(LinodeClient)
+
+	linode := toLinode(d)
+
+	res := &Linode{}
+
+	// https://developers.linode.com/api/v4#operation/createLinodeInstance
+	if err := client.Request("POST", fmt.Sprintf("linode/instances"), linode, res); err != nil {
+		return err
+	}
+
+	res.fillResourceData(d)
+
+	return nil
 }
 
 func readLinodeLinode(d *schema.ResourceData, meta interface{}) error {
