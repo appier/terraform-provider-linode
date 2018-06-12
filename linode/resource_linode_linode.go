@@ -12,6 +12,9 @@ func resourceLinodeLinode() *schema.Resource {
 		Read:   readLinodeLinode,
 		Update: updateLinodeLinode,
 		Delete: deleteLinodeLinode,
+		Importer: &schema.ResourceImporter{
+			State: schema.ImportStatePassthrough,
+		},
 		Schema: map[string]*schema.Schema{
 			"hypervisor": &schema.Schema{
 				Type:     schema.TypeString,
