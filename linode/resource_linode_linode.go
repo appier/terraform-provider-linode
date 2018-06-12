@@ -2,6 +2,7 @@ package linode
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/hashicorp/terraform/helper/schema"
 )
@@ -166,6 +167,74 @@ func toLinode(d *schema.ResourceData) *Linode {
 	}
 
 	return res
+}
+
+func (l *Linode) fillResourceData(d *schema.ResourceData) {
+	d.SetId(fmt.Sprintf("%d", *l.ID))
+
+	if l.Hypervisor != nil {
+		d.Set("hypervisor", *l.Hypervisor)
+	}
+
+	if l.Label != nil {
+		d.Set("label", *l.Label)
+	}
+
+	if l.Region != nil {
+		d.Set("region", *l.Region)
+	}
+
+	if l.Type != nil {
+		d.Set("type", *l.Type)
+	}
+
+	if l.Status != nil {
+		d.Set("status", *l.Status)
+	}
+
+	if l.IPv4 != nil {
+		d.Set("ipv4", *l.IPv4)
+	}
+
+	if l.IPv6 != nil {
+		d.Set("ipv6", *l.IPv6)
+	}
+
+	if l.StackscriptID != nil {
+		d.Set("stackscript_id", *l.StackscriptID)
+	}
+
+	if l.StackscriptData != nil {
+		d.Set("stackscript_id", *l.StackscriptData)
+	}
+
+	if l.Booted != nil {
+		d.Set("booted", *l.Booted)
+	}
+
+	if l.RootPass != nil {
+		d.Set("root_pass", *l.RootPass)
+	}
+
+	if l.Image != nil {
+		d.Set("image", *l.Image)
+	}
+
+	if l.AuthorizedKeys != nil {
+		d.Set("authorized_keys", *l.AuthorizedKeys)
+	}
+
+	if l.BackupID != nil {
+		d.Set("backup_id", *l.BackupID)
+	}
+
+	if l.BackupsEnabled != nil {
+		d.Set("backups_enabled", *l.BackupsEnabled)
+	}
+
+	if l.SwapSize != nil {
+		d.Set("swap_size", *l.SwapSize)
+	}
 }
 
 func createLinodeLinode(d *schema.ResourceData, meta interface{}) error {
