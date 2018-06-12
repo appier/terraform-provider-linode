@@ -45,13 +45,13 @@ type Linode struct {
 	IPv6            *[]string `json:"ipv6,omitempty"`
 	StackscriptID   *string   `json:"stackscript_id,omitempty"`
 	StackscriptData *string   `json:"stackscript_data,omitempty"`
-	Booted          *bool     `jsons:"booted,omitempty"`
-	RootPass        *string   `jsons:"root_pass,omitempty"`
-	Image           *string   `jsons:"image,omitempty"`
-	AuthorizedKeys  *[]string `jsons:"authorized_keys,omitempty"`
-	BackupID        *string   `jsons:"backup_id,omitempty"`
-	BackupsEnabled  *bool     `jsons:"backups_enabled,omitempty"`
-	SwapSize        *int      `jsons:"swap_size,omitempty"`
+	Booted          *bool     `json:"booted,omitempty"`
+	RootPass        *string   `json:"root_pass,omitempty"`
+	Image           *string   `json:"image,omitempty"`
+	AuthorizedKeys  *[]string `json:"authorized_keys,omitempty"`
+	BackupID        *string   `json:"backup_id,omitempty"`
+	BackupsEnabled  *bool     `json:"backups_enabled,omitempty"`
+	SwapSize        *int      `json:"swap_size,omitempty"`
 }
 
 type LinodeClient interface {
@@ -111,7 +111,7 @@ func (c LinodeClientImpl) Request(method string, snippet string, body interface{
 	bufStr := buf.String()
 
 	if rsp.StatusCode != 200 {
-		return fmt.Errorf("status %s, body = %s", bufStr)
+		return fmt.Errorf("status %s, body = %s", rsp.Status, bufStr)
 	}
 
 	err = json.Unmarshal([]byte(bufStr), res)
