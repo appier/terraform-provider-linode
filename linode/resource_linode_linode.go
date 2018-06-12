@@ -1,7 +1,6 @@
 package linode
 
 import (
-	"errors"
 	"fmt"
 
 	"github.com/hashicorp/terraform/helper/schema"
@@ -274,13 +273,52 @@ func createLinodeLinode(d *schema.ResourceData, meta interface{}) error {
 }
 
 func readLinodeLinode(d *schema.ResourceData, meta interface{}) error {
-	return errors.New("Not implemented")
+	client := meta.(LinodeClient)
+
+	id := d.Id()
+
+	res := &Linode{}
+
+	// https://developers.linode.com/api/v4#operation/getLinodeInstance
+	if err := client.Request("GET", fmt.Sprintf("linode/instances/%s", id), nil, res); err != nil {
+		return err
+	}
+
+	res.fillResourceData(d)
+
+	return nil
 }
 
 func updateLinodeLinode(d *schema.ResourceData, meta interface{}) error {
-	return errors.New("Not implemented")
+	client := meta.(LinodeClient)
+
+	id := d.Id()
+
+	linode := toLinode(d)
+
+	res := &Linode{}
+
+	// https://developers.linode.com/api/v4#operation/updateLinodeInstance
+	if err := client.Request("PUT", fmt.Sprintf("linode/instances/%s", id), linode, res); err != nil {
+		return err
+	}
+
+	res.fillResourceData(d)
+
+	return nil
 }
 
 func deleteLinodeLinode(d *schema.ResourceData, meta interface{}) error {
-	return errors.New("Not implemented")
+	client := meta.(LinodeClient)
+
+	id := d.Id()
+
+	res := &Linode{}
+
+	// https://developers.linode.com/api/v4#operation/deleteLinodeInstance
+	if err := client.Request("DELETE", fmt.Sprintf("linode/instances/%s", id), nil, res); err != nil {
+		return err
+	}
+
+	return nil
 }
