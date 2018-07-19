@@ -229,6 +229,12 @@
   version = "v1.1.1"
 
 [[projects]]
+  name = "github.com/sethvargo/go-password"
+  packages = ["password"]
+  revision = "d207206009266fab3e355f1a0488b47ac24139c7"
+  version = "v0.1.1"
+
+[[projects]]
   name = "github.com/ulikunitz/xz"
   packages = [".","internal/hash","internal/xlog","lzma"]
   revision = "0c6b41e72360850ca4f98dc341fd999726ea007f"
@@ -279,6 +285,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "37b1dfa1faa7fb7f1638e4dad103736d2c423558dc0ffd6467c8c60e4d3353be"
+  inputs-digest = "644765112b227b6d769ddbbd223fd2304f85f5ce698fd56310537370189a6b88"
   solver-name = "gps-cdcl"
   solver-version = 1

@@ -2,8 +2,10 @@ package linode
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/hashicorp/terraform/helper/schema"
+	"github.com/sethvargo/go-password/password"
 )
 
 func resourceLinodeLinode() *schema.Resource {
@@ -65,7 +67,7 @@ func resourceLinodeLinode() *schema.Resource {
 			},
 			"root_pass": &schema.Schema{
 				Type:      schema.TypeString,
-				Required:  true,
+				Optional:  true,
 				Sensitive: true,
 			},
 			"image": &schema.Schema{
@@ -262,6 +264,12 @@ func createLinodeLinode(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(LinodeClient)
 
 	linode := toLinode(d)
+
+	if linode.RootPass == nil {
+		log.Printf("Generate random root_pass")
+		rootPass := password.Generate(64, 10, 10, false, false)
+		linode.RootPass = &rootPass
+	}
 
 	res := &Linode{}
 
