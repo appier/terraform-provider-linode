@@ -3,6 +3,7 @@ package linode
 import (
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/hashicorp/terraform/helper/schema"
 	"github.com/sethvargo/go-password/password"
@@ -283,6 +284,20 @@ func createLinodeLinode(d *schema.ResourceData, meta interface{}) error {
 	}
 
 	res.fillResourceData(d)
+	id := d.Id()
+
+	for {
+		// https://developers.linode.com/api/v4#operation/getLinodeInstance
+		if err := client.Request("GET", fmt.Sprintf("linode/instances/%s", id), nil, res); err != nil {
+			return err
+		}
+
+		if *res.Status == "running" {
+			break
+		}
+
+		time.Sleep(5 * time.Second)
+	}
 
 	return nil
 }
