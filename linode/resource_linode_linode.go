@@ -267,7 +267,11 @@ func createLinodeLinode(d *schema.ResourceData, meta interface{}) error {
 
 	if linode.RootPass == nil {
 		log.Printf("Generate random root_pass")
-		rootPass := password.Generate(64, 10, 10, false, false)
+		rootPass, err := password.Generate(64, 10, 10, false, false)
+		if err != nil {
+			return err
+		}
+
 		linode.RootPass = &rootPass
 	}
 
