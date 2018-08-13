@@ -44,7 +44,7 @@ type Linode struct {
 	Status          *string   `json:"status,omitempty"`
 	IPv4            *[]string `json:"ipv4,omitempty"`
 	IPv6            *string   `json:"ipv6,omitempty"`
-	StackscriptID   *int32    `json:"stackscript_id,omitempty"`
+	StackscriptID   *int      `json:"stackscript_id,omitempty"`
 	StackscriptData *string   `json:"stackscript_data,omitempty"`
 	Booted          *bool     `json:"booted,omitempty"`
 	RootPass        *string   `json:"root_pass,omitempty"`

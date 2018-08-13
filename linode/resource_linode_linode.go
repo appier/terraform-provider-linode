@@ -142,7 +142,7 @@ func toLinode(d *schema.ResourceData) *Linode {
 	}
 
 	if value, ok := d.GetOk("stackscript_id"); ok {
-		stackscriptID := value.(int32)
+		stackscriptID := value.(int)
 		res.StackscriptID = &stackscriptID
 	}
 
