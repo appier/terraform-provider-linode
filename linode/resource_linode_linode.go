@@ -55,7 +55,7 @@ func resourceLinodeLinode() *schema.Resource {
 				Computed: true,
 			},
 			"stackscript_id": &schema.Schema{
-				Type:     schema.TypeString,
+				Type:     schema.TypeInt,
 				Optional: true,
 			},
 			"stackscript_data": &schema.Schema{
@@ -142,7 +142,7 @@ func toLinode(d *schema.ResourceData) *Linode {
 	}
 
 	if value, ok := d.GetOk("stackscript_id"); ok {
-		stackscriptID := value.(string)
+		stackscriptID := value.(int32)
 		res.StackscriptID = &stackscriptID
 	}
 
