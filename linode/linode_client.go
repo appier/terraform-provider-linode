@@ -35,24 +35,24 @@ type DomainRecord struct {
 }
 
 type Linode struct {
-	ID              *int      `json:"id,omitempty"`
-	Hypervisor      *string   `json:"hypervisor,omitempty"`
-	Group           *string   `json:"group,omitempty"`
-	Label           *string   `json:"label,omitempty"`
-	Region          *string   `json:"region,omitempty"`
-	Type            *string   `json:"type,omitempty"`
-	Status          *string   `json:"status,omitempty"`
-	IPv4            *[]string `json:"ipv4,omitempty"`
-	IPv6            *string   `json:"ipv6,omitempty"`
-	StackscriptID   *int      `json:"stackscript_id,omitempty"`
-	StackscriptData *string   `json:"stackscript_data,omitempty"`
-	Booted          *bool     `json:"booted,omitempty"`
-	RootPass        *string   `json:"root_pass,omitempty"`
-	Image           *string   `json:"image,omitempty"`
-	AuthorizedKeys  *[]string `json:"authorized_keys,omitempty"`
-	BackupID        *string   `json:"backup_id,omitempty"`
-	BackupsEnabled  *bool     `json:"backups_enabled,omitempty"`
-	SwapSize        *int      `json:"swap_size,omitempty"`
+	ID              *int               `json:"id,omitempty"`
+	Hypervisor      *string            `json:"hypervisor,omitempty"`
+	Group           *string            `json:"group,omitempty"`
+	Label           *string            `json:"label,omitempty"`
+	Region          *string            `json:"region,omitempty"`
+	Type            *string            `json:"type,omitempty"`
+	Status          *string            `json:"status,omitempty"`
+	IPv4            *[]string          `json:"ipv4,omitempty"`
+	IPv6            *string            `json:"ipv6,omitempty"`
+	StackscriptID   *int               `json:"stackscript_id,omitempty"`
+	StackscriptData *map[string]string `json:"stackscript_data,omitempty"`
+	Booted          *bool              `json:"booted,omitempty"`
+	RootPass        *string            `json:"root_pass,omitempty"`
+	Image           *string            `json:"image,omitempty"`
+	AuthorizedKeys  *[]string          `json:"authorized_keys,omitempty"`
+	BackupID        *string            `json:"backup_id,omitempty"`
+	BackupsEnabled  *bool              `json:"backups_enabled,omitempty"`
+	SwapSize        *int               `json:"swap_size,omitempty"`
 }
 
 type LinodeClient interface {
@@ -91,7 +91,7 @@ func (c LinodeClientImpl) Request(method string, snippet string, body interface{
 		if err != nil {
 			return err
 		}
-		log.Printf("req = %s %s %s", method, url, content)
+		log.Printf("req = %s %s %s, body = %+v", method, url, content, body)
 		req, err = http.NewRequest(method, url, bytes.NewReader(content))
 		if err != nil {
 			return err

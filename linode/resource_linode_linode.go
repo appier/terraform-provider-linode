@@ -1,6 +1,7 @@
 package linode
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"time"
@@ -98,7 +99,7 @@ func resourceLinodeLinode() *schema.Resource {
 	}
 }
 
-func toLinode(d *schema.ResourceData) *Linode {
+func toLinode(d *schema.ResourceData) (*Linode, error) {
 	res := &Linode{}
 
 	if value, ok := d.GetOk("hypervisor"); ok {
@@ -148,7 +149,10 @@ func toLinode(d *schema.ResourceData) *Linode {
 
 	if value, ok := d.GetOk("stackscript_data"); ok {
 		stackscriptData := value.(string)
-		res.StackscriptData = &stackscriptData
+		res.StackscriptData = new(map[string]string)
+		if err := json.Unmarshal([]byte(stackscriptData), res.StackscriptData); err != nil {
+			return nil, err
+		}
 	}
 
 	if value, ok := d.GetOk("booted"); ok {
@@ -186,10 +190,10 @@ func toLinode(d *schema.ResourceData) *Linode {
 		res.SwapSize = &swapSize
 	}
 
-	return res
+	return res, nil
 }
 
-func (l *Linode) fillResourceData(d *schema.ResourceData) {
+func (l *Linode) fillResourceData(d *schema.ResourceData) (err error) {
 	d.SetId(fmt.Sprintf("%d", *l.ID))
 
 	if l.Hypervisor != nil {
@@ -229,7 +233,11 @@ func (l *Linode) fillResourceData(d *schema.ResourceData) {
 	}
 
 	if l.StackscriptData != nil {
-		d.Set("stackscript_id", *l.StackscriptData)
+		content, err := json.Marshal(l.StackscriptData)
+		if err != nil {
+			return err
+		}
+		d.Set("stackscript_id", content)
 	}
 
 	if l.Booted != nil {
@@ -259,12 +267,17 @@ func (l *Linode) fillResourceData(d *schema.ResourceData) {
 	if l.SwapSize != nil {
 		d.Set("swap_size", *l.SwapSize)
 	}
+
+	return nil
 }
 
 func createLinodeLinode(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(LinodeClient)
 
-	linode := toLinode(d)
+	linode, err := toLinode(d)
+	if err != nil {
+		return err
+	}
 
 	if linode.RootPass == nil {
 		log.Printf("Generate random root_pass")
@@ -283,7 +296,10 @@ func createLinodeLinode(d *schema.ResourceData, meta interface{}) error {
 		return err
 	}
 
-	res.fillResourceData(d)
+	if err := res.fillResourceData(d); err != nil {
+		return err
+	}
+
 	id := d.Id()
 
 	for {
@@ -314,7 +330,9 @@ func readLinodeLinode(d *schema.ResourceData, meta interface{}) error {
 		return err
 	}
 
-	res.fillResourceData(d)
+	if err := res.fillResourceData(d); err != nil {
+		return err
+	}
 
 	return nil
 }
@@ -324,7 +342,10 @@ func updateLinodeLinode(d *schema.ResourceData, meta interface{}) error {
 
 	id := d.Id()
 
-	linode := toLinode(d)
+	linode, err := toLinode(d)
+	if err != nil {
+		return err
+	}
 
 	res := &Linode{}
 
@@ -333,7 +354,9 @@ func updateLinodeLinode(d *schema.ResourceData, meta interface{}) error {
 		return err
 	}
 
-	res.fillResourceData(d)
+	if err := res.fillResourceData(d); err != nil {
+		return err
+	}
 
 	return nil
 }
