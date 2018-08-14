@@ -95,6 +95,10 @@ func resourceLinodeLinode() *schema.Resource {
 				Type:     schema.TypeInt,
 				Optional: true,
 			},
+			"private_ip": &schema.Schema{
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
 		},
 	}
 }
@@ -190,6 +194,11 @@ func toLinode(d *schema.ResourceData) (*Linode, error) {
 		res.SwapSize = &swapSize
 	}
 
+	if value, ok := d.GetOk("private_ip"); ok {
+		privateIP := value.(bool)
+		res.PrivateIP = &privateIP
+	}
+
 	return res, nil
 }
 
@@ -266,6 +275,10 @@ func (l *Linode) fillResourceData(d *schema.ResourceData) (err error) {
 
 	if l.SwapSize != nil {
 		d.Set("swap_size", *l.SwapSize)
+	}
+
+	if l.PrivateIP != nil {
+		d.Set("private_ip", *l.PrivateIP)
 	}
 
 	return nil

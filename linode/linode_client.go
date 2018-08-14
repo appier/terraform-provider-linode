@@ -53,6 +53,7 @@ type Linode struct {
 	BackupID        *string            `json:"backup_id,omitempty"`
 	BackupsEnabled  *bool              `json:"backups_enabled,omitempty"`
 	SwapSize        *int               `json:"swap_size,omitempty"`
+	PrivateIP       *bool              `json:"private_ip,omitempty"`
 }
 
 type LinodeClient interface {
