@@ -265,6 +265,15 @@ func (l *Linode) fillResourceData(d *schema.ResourceData) (err error) {
 
 	if l.IPv4 != nil {
 		d.Set("ipv4", *l.IPv4)
+
+		for _, val := range *l.IPv4 {
+			ip := net.ParseIP(val)
+			if isPrivateIP(ip) {
+				d.Set("ipv4_private", val)
+			} else {
+				d.Set("ipv4_public", val)
+			}
+		}
 	}
 
 	if l.IPv6 != nil {
