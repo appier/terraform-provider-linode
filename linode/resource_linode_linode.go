@@ -20,7 +20,8 @@ func init() {
 		"172.16.0.0/12",  // RFC1918
 		"192.168.0.0/16", // RFC1918
 		"::1/128",        // IPv6 loopback
-		"fe80::/10",      // IPv6 link-local
+		"fc00::/7",       // RFC4193 IPv6 local private network range
+		"fe80::/10",      // RFC4291 IPv6 link-local
 	} {
 		_, block, _ := net.ParseCIDR(cidr)
 		privateIPBlocks = append(privateIPBlocks, block)
