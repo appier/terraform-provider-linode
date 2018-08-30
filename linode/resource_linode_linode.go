@@ -171,16 +171,6 @@ func toLinode(d *schema.ResourceData) (*Linode, error) {
 		res.Status = &status
 	}
 
-	if value, ok := d.GetOk("ipv4"); ok {
-		ipv4 := value.([]string)
-		res.IPv4 = &ipv4
-	}
-
-	if value, ok := d.GetOk("ipv6"); ok {
-		ipv6 := value.(string)
-		res.IPv6 = &ipv6
-	}
-
 	if value, ok := d.GetOk("stackscript_id"); ok {
 		stackscriptID := value.(int)
 		res.StackscriptID = &stackscriptID
